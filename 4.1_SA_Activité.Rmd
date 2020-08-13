@@ -15,18 +15,18 @@ bibliography: references.bib
 
 # Introduction
 
-L'objectif de cette étude est d'analyser les ADN mobilité (séquence d'états d'activités) (@ADNMobil2017) des personnes résidant dans l'aire urbaine de Nantes. À l'aide d'outils statistiques, on mesure l'influence des covariables (les caractéristiques des individus comme l'occupation, le niveau d'éducation, etc.) sur l'évolution des mobilités quotidiennes dans la journée. Finalement on suggère des classification typologiques selon les porfils type de déplacement.
+L'objectif de cette étude est d'analyser les ADN mobilité (séquence d'états d'activités) (@ADNMobil2017) des personnes résidant dans l'aire urbaine de Nantes. À l'aide d'outils statistiques, on mesure l'influence des covariables (les caractéristiques des individus comme l'occupation, le niveau d'éducation, etc.) sur l'évolution des mobilités quotidiennes dans la journée. Finalement on suggère des classification typologiques selon les profils type de déplacement.
 
 Pour cela, on utilise deux approches différentes, les algorithmes de clustering ou classement et les agorithmes d'arbre de régression. Les bases statistiques se fixent sur l'analyse de variance (ANOVA-like).
 
-Avant de commencer, il se fait nécessaire remarquer que l'étude reste incomplet sans les apports sociologiques, c'est-a-dire que les classements et les typologies sont des spéculations qui ne représentent pas forcement la réalité.
+Avant de commencer, il est nécessaire nécessaire de remarquer que l'étude reste incomplète sans les apports sociologiques, c'est-a-dire que les classements et les typologies sont des spéculations qui ne représentent pas forcement la réalité.
 
 Cette introduction est dédiée à:
 
-* la lecture des biliotéques utilisées,
+* la lecture des biliothèques utilisées,
 * la lecture des fonctions du script *0_functionsR.R*,
 * le chargement et la jointure entre l'ADN mobilité (*ADN_M*; ensemble de séquences avec leur *ID_IND*) et le tableau de features des individus (*perTable*; *ID_IND* avec ses caractéristiques associées)
-* la création de la structure de séquences propre à Traminer (*adn.seq*) en specifiant l'alphabet, les couleurs et d'autres paramètres,
+* la création de la structure de séquences propres à TramineR (*adn.seq*) en specifiant l'alphabet, les couleurs et d'autres paramètres,
 * la modification du pas de temps de chaque séquence d'états, puis la mise à jour de la structure adn.seq
  
 ```{r error=FALSE, message=FALSE, warning=FALSE, collapse=TRUE, include=FALSE}
@@ -119,9 +119,9 @@ adn.seq <- seqdef(data = ADN_M ,
 
 ## Pas de temps
 
-Le choix du pas de temps, c'est-à-dire, l'intervalle de temps de chaque état (*tstep*) d'une séquence, est une étape clé de l'analyse. Sa modification est implémentée à l'aide de la fonction *seqtimestep*. L'algorithme coupe les séquences en tranches horaires de taille définie par l'utilisateur (*tstep*), puis seulement l'état dominant est maintenu pour représenter la tranche en question. À la fin, on a une séquence de taille réduite. S'il y a deux quantites pareils d'états différents dans une même tranche horaire, le premier état dans l'ordre de la séquence est privilégié. En ce qui concerne la perte d'informations, quand le pas de temps vaut 15 par exemple, les déplacements de moins de 8 minutes sont probablement négligés. 
+Le choix du pas de temps, c'est-à-dire, l'intervalle de temps de chaque état (*tstep*) d'une séquence, est une étape clé de l'analyse. Sa modification est implémentée à l'aide de la fonction *seqtimestep*. L'algorithme coupe les séquences en tranches horaires de taille définie par l'utilisateur (*tstep*), puis seulement l'état dominant est maintenu pour représenter la tranche en question. À la fin, on a une séquence de taille réduite. S'il y a deux quantités similaires d'états différents dans une même tranche horaire, le premier état dans l'ordre de la séquence est privilégié. En ce qui concerne la perte d'informations, quand le pas de temps vaut 15 par exemple, les déplacements de moins de 8 minutes sont probablement négligés. 
 
-À l'origine, les activités décrites par la personne enquêtée ont une précision à la minute. Cepandant, il est difficile d'analyser un ensemble de séquences avec une résolution très fine parce que la moindre décalage horaire entre le début des activités les rend plus disimilaires, difficiles à classer et augmente le temps de calcul. C'est le compromi entre l'analyse et la perte d'information, ce qui dépend également du nombre de séquences traitées.
+À l'origine, les activités décrites par la personne enquêtée ont une précision à la minute. Cepandant, il est difficile d'analyser un ensemble de séquences avec une résolution très fine parce que le moindre décalage horaire entre le début des activités les rend plus disimilaires, difficiles à classer et augmente le temps de calcul. Le compromis entre l'analyse et la perte d'information  dépend également du nombre de séquences à traiter.
 
 
 ```{r, message = F, warning = FALSE, eval = T}
@@ -151,11 +151,11 @@ rm(adn.colors, nstep)
 
 # Analyse globale des séquences
 
-Cette section analyse l'ensemble de séquences à travers des indicateurs globales. Alors, les étapes abordées dans cette section sont :
+Cette section analyse l'ensemble de séquences à travers des indicateurs globaux. Alors, les étapes abordées dans cette section sont :
 
-* l'introduction aux outils TraMineR (@gabadinho2009mining)
-* la visualisation des séquences de plusieurs points de vue
-* l'application d'une analyse longitudinale et une analyse transversale sur toutes les séquences
+* l'introduction aux outils TraMineR (@gabadinho2009mining);
+* la visualisation des séquences de plusieurs points de vue;
+* l'application d'une analyse longitudinale et une analyse transversale sur toutes les séquences.
 
 ## Prémiers résultas
 
@@ -198,7 +198,7 @@ Soit $x$ le pas de temps, $s$ le nombre potentiel d'états et $\pi_{i}$ la propo
 
 $$h(x)=h\left(\pi_{i}, \ldots \pi_{s}\right)=-\sum_{i=1}^{s} \pi_{i} \log \left(\pi_{i}\right)$$
 
-Normalement, l'allure de la courbe de l'entropie des activités dans la journée possède une tracée type. Avec un point de minimum local et deux points de maximun (global et local), cela est le résultat d'une augmentation de la diversité d'activités le matin, une réduction le midi durant la pause restauration suivie d'une deuxième hausse à l'après-midi.
+Normalement, l'allure de la courbe de l'entropie des activités dans la journée possède une trace type. Avec un point de minimum local et deux points de maximun (global et local), cela est le résultat d'une augmentation de la diversité d'activités le matin, une réduction le midi durant la pause restauration suivie d'une deuxième hausse à l'après-midi.
 
 Au contrario de l'entropie, la turbulence est appliquée en tant qu'analyse longitudinale, alors, chaque séquence est étudiée séparément. Proposée par Elzinga (@gabadinho2011analyzing), la turbulence d'une séquence est un indicateur composée qui mesure la complexité d'une séquence. Elle tient compte deux éléments, le nombre de sous-séquences distinctes de la séquence d'états successifs distincts et la variance des temps consécutifs passés dans les états distincts. D'un point de vue pratique, plus différents sont les durées des états et plus leur variance est élevée, plus la séquence est complexe. En ce sens, une petite variance de durée indique une complexité élevée (@mcbride2019fragmentation). 
 
@@ -270,7 +270,7 @@ Une fois calculée les disimilarités par paire de séquences (matrice de disimi
 Cette section est dédiée à :
 
 * l'application de l'algorithme de clustering: classification hiérarchique ascendante (et P.A.M comme option)
-* la mésure de la qualité des partitions pour aider à la recherche des clusterings optimales
+* la mesure de la qualité des partitions pour aider à la recherche des clusterings optimales
 
 ## Application de clustering
 ### Création de partitions par l'application de la classification hiérarchique
@@ -322,15 +322,15 @@ rm(wardTree)
 
 Paralèllement, une autre approche disponible dans la bibliothèque *WeightedCluster* est la création de partitions par l'application de *Partitioning Around Medoids* (P.A.M.). Une médoïde est l’observation d’un groupe qui minimise la somme pondérée des distances aux autres observations de ce groupe. (@studerWCmanuel)
 
-Selon Studer (@studerWCmanuel), "dans un premier temps on initialise l’algorithme en cherchant les observations qui diminuent le plus la somme pondérée des distances aux médoïdes existants, en choisissant le médoïde de l’ensemble des données au départ. Une fois la solution initiale construite, la deuxième phase de l’algorithme commence. Pour chaque observation, on calcule le gain potentiel si l’on remplaçait l’un des médoïdes existants par cette observation. Le gain est calculé au niveau global et en fonction des distances pondérées aux médoïdes les plus proches. On remplace ensuite le médoïde par l’observation qui conduit au plus grand gain possible. On répète ces opérations jusqu’à ce qu’il ne soit plus possible d’améliorer la solution courante. " 
+Selon Studer (@studerWCmanuel), "dans un premier temps on initialise l’algorithme en cherchant les observations qui diminuent le plus la somme pondérée des distances aux médoïdes existants, en choisissant le médoïde de l’ensemble des données au départ. Une fois la solution initiale construite, la deuxième phase de l’algorithme commence. Pour chaque observation, on calcule le gain potentiel si l’on remplaçait l’un des médoïdes existant par cette observation. Le gain est calculé au niveau global et en fonction des distances pondérées aux médoïdes les plus proches. On remplace ensuite le médoïde par l’observation qui conduit au plus grand gain possible. On répète ces opérations jusqu’à ce qu’il ne soit plus possible d’améliorer la solution courante. " 
 
 L'avantage de l’algorithme P.A.M est qu'il cherche à maximiser un critère global et non uniquement un critère local. (@studerWCmanuel). Il est également possible d'utiliser des médoïdes de l'arbre de regroupement coupée comme point de départ de l'algorithme P.A.M, ce qui optimise sa qualité.
 
 ## Étude de la qualité d'une partition
 
-Après l'étape de classement, il est nécessaire étudier la qualité statistique des clusters crées. Un classement de bonne qualité est celui qui possède à la fois des distances inter-groupes élevées, ou autrement dit, les groupes sont le plus disimilaire possible entre eux, mais aussi une forte homogénéité intra-groupe. L'interêt de cette étude est de pouvoir comparer des classements et de trouver la quantité idéale de clusters, un outil d'aide à la décision. Comme il en existe 10 indicateurs dans la bibliothèque *WeightedCluster*, à titre d'exemple, on se focalise sur deux indicateurs.
+Après l'étape de classement, il est nécessaire d'étudier la qualité statistique des clusters créés. Un classement de bonne qualité est celui qui possède à la fois des distances inter-groupes élevées, ou autrement dit, les groupes sont le plus disimilaires possible entre eux, mais aussi une forte homogénéité intra-groupe. L'interêt de cette étude est de pouvoir comparer des classements et de trouver la quantité idéale de clusters, un outil d'aide à la décision. Comme il en existe 10 indicateurs dans la bibliothèque *WeightedCluster*, à titre d'exemple, on se focalise sur deux indicateurs.
 
-Le premier s'appelle *Average Silhouette Width* (ASW), la largeur moyenne de la silhouette. Cet indice traduit l'idée de cohérence de l’assignation d’une observation à un groupe donné. Sa valeur varie entre 1 et -1. Soit $a_{i}$ la distance moyenne pondérée d'une observation *i* aux autres membres de son groupe *k*, $b_{i}$ la distance moyenne pondérée au groupe ${\ell}$ **le plus proche**, $W_{k}$ la somme des pondérations des observations appartenant au groupe *k* , w_{i} le pois d'une observation *i* et $d_{i j}$ la distance entre l'observation *i* et *j*, la silhouette $s_{i}$ d’une observation se calcule de la manière suivante.
+Le premier s'appelle *Average Silhouette Width* (ASW), la largeur moyenne de la silhouette. Cet indice traduit l'idée de cohérence de l’assignation d’une observation à un groupe donné. Sa valeur varie entre 1 et -1. Soit $a_{i}$ la distance moyenne pondérée d'une observation *i* aux autres membres de son groupe *k*, $b_{i}$ la distance moyenne pondérée au groupe ${\ell}$ **le plus proche**, $W_{k}$ la somme des pondérations des observations appartenant au groupe *k* , w_{i} le poids d'une observation *i* et $d_{i j}$ la distance entre l'observation *i* et *j*, la silhouette $s_{i}$ d’une observation se calcule de la manière suivante.
 
 $$a_{i}=\frac{1}{W_{k}-1} \sum_{j \in k} w_{j} d_{i j}$$
 
@@ -338,7 +338,7 @@ $$b_{i}=\frac{1}{W_{\ell}} \sum_{j \in \ell} w_{j} d_{i j}$$
 
 $$s_{i}=\frac{b_{i}-a_{i}}{\max \left(a_{i}, b_{i}\right)}$$
 
-Ici, comme les séquences n'ont pas de pois, $w_{j}$ vaut toujours 1 et $W_{k}$ est le nombre d'observation du groupe *k*. La AWS d'un groupe est donc la moyenne pondéré des silhouettes $s_{i}$ de chaque observation du groupe. 
+Ici, comme les séquences n'ont pas de poids, $w_{j}$ vaut toujours 1 et $W_{k}$ est le nombre d'observation du groupe *k*. La AWS d'un groupe est donc la moyenne pondéré des silhouettes $s_{i}$ de chaque observation du groupe. 
 
 Il n'existe pas de règle générale pour intrepréter les résultats de la silhouette d'une partition, par contre, à titre de comparaison, le tableau ci-dessous est proposée par Studer (@studerWCmanuel).
 
@@ -358,7 +358,7 @@ $$C_{\text {index}}=\frac{S-S_{\min }}{S_{\max }-S_{\min }}$$
 
 ### Mesure de la qualité statistique d'une seule partition
 
-Avant d'étudier le choix des partitions, on choisit les quatre clusters crées par l'application de la classement hiérarchique. L'intérêt est d'évaluer cette partition selon tous les indicateur de la bibliothèque *WeightedCluster* pour mettre en lumière la diversité d'indicateur de la bibliothèque. Les résultats obtenus sont les suivants.
+Avant d'étudier le choix des partitions, on choisit les quatre clusters créés par l'application de la méthode de classement hiérarchique. L'intérêt est d'évaluer cette partition selon l'ensemble des indicateurs de la bibliothèque *WeightedCluster* pour mettre en lumière la diversité d'indicateur de cette bibliothèque. Les résultats obtenus sont les suivants.
 
 ```{r, eval = F, collapse=F, echo=T}
 # Definir la matrice de dissimilarites pour l'etude de la qualité des partitions
@@ -416,7 +416,7 @@ seqIplot(adn.seq, group=clusterRange$clustering$cluster11, border=NA, with.legen
 
 Dans cette section, on applique une méthodologie pour analyser la relation entre les séquences d'états d'activités et les covariables. Inspirée par des principes d'analyse de la variance, cette approche examine comme les covariables expliquent la divergence des profils d'activités dans la journée. Les disimilarités par paires sont fondamentales pour déterminer l'écart entre les séquences, ce qui permet de développer une série d'outils d'analyse basées sur la signification statistique. Alors, on utilise les écarts pour tester les différences entre les groupes, un pseudo-R2 pour mesurer la force des associations séquence-covariables et une statistique de Levene généralisée pour tester les différences dans les écarts intra-groupe.
 
-L'analyse de covariable est dédié à:
+L'analyse de covariable est dédiée à:
 
 * l'introduction à la somme des carrées totale (SST) des résidus, à la somme des carrées au sein des groupes (SSW) et à la somme des carrées entre groupes (SSB) .
 * l'analyse de type ANOVA; association entre les trajectoires et chacune des covariables considérées indépendamment.
@@ -425,7 +425,7 @@ L'analyse de covariable est dédié à:
 
 Le concept de "divergence" considéré ici évalue la ***diversité des trajectoires***. Inspirée par l'idée de variance, la divergence est calculée à partir d'une matrice de disimilarités. (@studer2011discrepancy)
 
-L'élement clé de la divergence est la somme des carrée des résidus d'un échantillon. Soit $W$ le nombre d'observations total d'un échantillon et $d_{i j}$ une mesure de disimilarité non-euclidienne entre l'observation $i$ et $j$, il est possible de traduire la somme des carrées $SS$ dans la rélation suivante.
+L'élement clé de la divergence est la somme des carrés des résidus d'un échantillon. Soit $W$ le nombre d'observations total d'un échantillon et $d_{i j}$ une mesure de disimilarité non-euclidienne entre l'observation $i$ et $j$, il est possible de traduire la somme des carrés $SS$ dans la rélation suivante.
 
 $$S S=\frac{1}{W} \sum_{i=1}^{n} \sum_{j=i+1}^{n} d_{i j}^{2}$$
 
@@ -433,7 +433,7 @@ En appliquant la définition $s^{2}=\frac{1}{W} S S$ de la variance de l'échant
 
 $$s^{2}=\frac{1}{2 W^{2}} \sum_{i=1}^{n} \sum_{j=1}^{n} d_{i j}^{2}$$
 
-Dans l'exemple suivant on calcule la divergence totale pour les séquences de l'aire urbaine de Nantes, puis, en considérant quatre cluster issues du cluster hiérarchique, la divergence interne à chaque groupe:
+Dans l'exemple suivant on calcule la divergence totale pour les séquences de l'aire urbaine de Nantes, puis, en considérant quatre clusters issus du cluster hiérarchique, la divergence interne à chaque groupe:
 
 ```{r, eval=F, warning=FALSE, collapse=T}
 # Definir la matrice de dissimilarites pour les testes ANOVA et MANOVA
@@ -472,7 +472,7 @@ La signification statistique de l'association ne peut pas être évaluée avec l
 
 Dans le cas du test F, un *p-value* inférieur au niveau de signification choisie (normalement 5%) indique que la trajectoire d'un individu dans la journée diffère de façon signiﬁcative au regard de la covariable en étude. Il est généralement admis que 5 000 permutations devraient être utilisées pour évaluer un seuil de signification de 1% et 1 000 pour un seuil de 5% (@studer2011discrepancy).
 
-Finalement, on s'é à la ***mesure de l'égalité des écarts intra-groupe, autrement dit, test de l'homogénéité de la divergence***, le test Levene. D'un point de vue géométrique, lorsque on évalue l'homogénéité de la divergence, on mesure les différences dans le rayon de la distribution des séquences au sein de chaque groupe, une analyse de variance appliquée sur la discrepance. Plus de détails par rapport à son calcul est trouvée dans la bibliographie (@studer2011discrepancy). 
+Finalement, on s'intéresse à la ***mesure de l'égalité des écarts intra-groupe, autrement dit, test de l'homogénéité de la divergence***, le test Levene. D'un point de vue géométrique, lorsque on évalue l'homogénéité de la divergence, on mesure les différences dans le rayon de la distribution des séquences au sein de chaque groupe, une analyse de variance appliquée sur la discrepance. Plus de détails concernant son calcul sont disponibles dans la bibliographie (@studer2011discrepancy). 
 
 ### Aanalyse ANOVA detailée apliquée à une covariable
 
@@ -544,7 +544,7 @@ rm(k, covariate, covariates)
 
 ## Analyse à l’aide d’un arbre de régression sur les séquences
 
-L'objectif d'un arbre de régression est de trouver les caractéristiques les plus importants dans la variations des profils d'activités compte tenu de leurs interactions. Essentiellement, l'algorithme d'un arbre de régression commence avec tous les individus regroupés dans un nœud initial. Il partitionne récursivement chaque nœud à l'aide des valeurs d'un indice, dans ce cas R2 pour simplifier les calculs. A chaque nœud, le indice et la division sont choisis de telle manière que les nœuds enfants résultants diffèrent autant que possible les uns des autres ou présentent, de manière plus ou moins équivalente, la plus faible divergence intra-groupe. Le processus est répété sur chaque nouveau nœud jusqu'à ce qu'un certain critère d'arrêt soit atteint, dans ce cas la valeur critique de signification du test F.
+L'objectif d'un arbre de régression est de trouver les caractéristiques les plus importants dans la variation des profils d'activités compte tenu de leurs interactions. Essentiellement, l'algorithme d'un arbre de régression commence avec tous les individus regroupés dans un nœud initial. Il partitionne récursivement chaque nœud à l'aide des valeurs d'un indice, dans ce cas R2 pour simplifier les calculs. A chaque nœud, l'indice et la division sont choisis de telle manière que les nœuds enfants résultants diffèrent autant que possible les uns des autres ou présentent, de manière plus ou moins équivalente, la plus faible divergence intra-groupe. Le processus est répété sur chaque nouveau nœud jusqu'à ce qu'un certain critère d'arrêt soit atteint, dans ce cas la valeur critique de signification du test F.
 
 En effet, la qualité globale de l'arbre peut être évaluée par la force de l'association entre les séquences et l'appartenance des feuilles (nœuds terminal). Le pseudo-F global permet de tester la signiﬁcation statistique de la segmentation obtenue, tandis que le pseudo-R2 global fournit une mesure de la partie de la divergence total qui est expliquée par l'arbre. (@studer2011discrepancy)
 
